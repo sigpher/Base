@@ -15,8 +15,8 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-// 依赖（多模块工程，artifactId 为模块名 base）
-implementation 'com.github.sigpher.Base:base:1.1.5-beta9'
+// 依赖
+implementation 'com.github.sigpher:Base:1.1.5-beta9'
 ```
 
 > 版本号即 git tag。首次构建由 JitPack 按 tag 编译，之后可从 `https://jitpack.io/com/github/sigpher/Base/base/<tag>/` 下载 aar/pom。
