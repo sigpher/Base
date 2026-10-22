@@ -8,12 +8,39 @@ import android.view.View;
 import android.view.WindowManager;
 import androidx.annotation.IntRange;
 import androidx.annotation.RequiresApi;
-import com.jaeger.library.StatusBarUtil;
 
 public final class StatusBarUtils {
 
-    public static void setColor(Activity activity, int color, int statusBarAlpha) {
-        StatusBarUtil.setColor(activity, color, statusBarAlpha);
+    /**
+     * 设置状态栏颜色（内联实现，替代 com.jaeger.statusbaruitl，避免为一行代码引入整个库）
+     *
+     * @param statusBarAlpha 0~255，透明度
+     */
+    public static void setColor(Activity activity, int color, @IntRange(from = 0, to = 255) int statusBarAlpha) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            activity.getWindow().setStatusBarColor(calculateStatusColor(color, statusBarAlpha));
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        }
+    }
+
+    /**
+     * 计算状态栏颜色（在原有颜色上叠一层黑色，alpha 越大越接近原色）
+     */
+    private static int calculateStatusColor(int color, int alpha) {
+        if (alpha == 0) {
+            return color;
+        }
+        float a = 1.0f - alpha / 255f;
+        int red = (int) ((color & 0xff0000) >> 16);
+        int green = (int) ((color & 0x00ff00) >> 8);
+        int blue = (int) (color & 0x0000ff);
+        red = (int) (red * a + 0.5);
+        green = (int) (green * a + 0.5);
+        blue = (int) (blue * a + 0.5);
+        return 0xff000000 | red << 16 | green << 8 | blue;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)

@@ -1,5 +1,0 @@
-ext {
-    buildMode = [
-            isApk : false
-    ]
-}

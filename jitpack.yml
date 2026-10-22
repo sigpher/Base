@@ -1,6 +1,6 @@
 jdk:
-  - openjdk8
+  - openjdk17
 before_install:
   - chmod +x gradlew
 install:
-  - ./gradlew :base:install -x test --console=plain --stacktrace
+  - ./gradlew :base:publishToMavenLocal -x test --console=plain --stacktrace

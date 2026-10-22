@@ -1,1 +1,2 @@
-include ':app', ':base'
+rootProject.name = 'Base'
+include ':base'
